@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useMemo } from "react"
+import { createContext, useCallback, useContext, useMemo } from "react"
 import { useRealtimeRunsWithTag } from "@trigger.dev/react-hooks"
 
 import type { RunStep, runWorkflowTask } from "@/features/workflows/tasks/run-workflow"
@@ -32,9 +32,26 @@ export function WorkflowRunsProvider({
   accessToken,
   children,
 }: WorkflowRunsProviderProps) {
+  // Realtime tokens are short-lived. If Trigger.dev rejects the initial token
+  // or it expires while this canvas stays open, mint a fresh token and let the
+  // SDK reconnect the subscription automatically.
+  const refreshAccessToken = useCallback(async () => {
+    const response = await fetch(
+      `/api/workflows/${encodeURIComponent(workflowId)}/realtime-token`,
+      { method: "POST" }
+    )
+
+    if (!response.ok) {
+      throw new Error("Couldn't refresh the workflow runs connection.")
+    }
+
+    const { token } = (await response.json()) as { token: string }
+    return token
+  }, [workflowId])
+
   const { runs, error } = useRealtimeRunsWithTag<typeof runWorkflowTask>(
     `workflow:${workflowId}`,
-    { accessToken }
+    { accessToken, refreshAccessToken }
   )
 
   const value = useMemo<WorkflowRunsContextValue>(
@@ -57,6 +74,10 @@ function useWorkflowRuns() {
     )
   }
   return ctx
+}
+
+export function useWorkflowRunsError(): Error | undefined {
+  return useWorkflowRuns().error
 }
 
 // A run is still producing steps while it's queued or executing.

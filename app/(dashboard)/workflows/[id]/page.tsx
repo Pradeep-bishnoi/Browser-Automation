@@ -42,7 +42,7 @@ export default async function Page({
         tags: [`workflow:${id}`],
       },
     },
-    expirationTime: "1hr",
+    expirationTime: "1h",
   })
 
   // The canvas and the sidebar's node palette live in separate components, so a

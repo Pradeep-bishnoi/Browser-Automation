@@ -9,6 +9,7 @@ import { NodeIcon } from "@/features/workflows/components/node-icon"
 import { useProPlan } from "@/features/workflows/hooks/use-pro-plan"
 import {
   useConsoleRuns,
+  useWorkflowRunsError,
   type ConsoleRun,
 } from "@/features/workflows/components/workflow-runs-provider"
 import type { RunStep } from "@/features/workflows/tasks/run-workflow"
@@ -125,11 +126,12 @@ export function LogsPanel({
   onSelect: (selection: ConsoleSelection) => void
 }) {
   const runs = useConsoleRuns()
+  const runsError = useWorkflowRunsError()
 
   if (runs.length === 0) {
     return (
       <div className="flex size-full items-center justify-center text-sm text-muted-foreground">
-        No runs yet
+        {runsError ? `Couldn't load runs: ${runsError.message}` : "No runs yet"}
       </div>
     )
   }
