@@ -89,7 +89,7 @@ export const runWorkflowTask = task({
       stagehand = new Stagehand({
         env: "BROWSERBASE",
         apiKey: process.env.BROWSERBASE_API_KEY!,
-        model: "google/gemini-2.5-flash",
+        model: "google/gemini-3.8-flash",
         // Pino's logging backend spawns a thread-stream worker (lib/worker.js)
         // that can't be resolved inside trigger.dev's bundled output. Disable it —
         // the option exists for exactly these minimal/bundled environments.
