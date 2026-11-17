@@ -33,7 +33,7 @@ export function useProPlan(): ProPlan {
 
   // `has` is undefined until the session loads; optional-chain and default to
   // false so callers never treat "unknown" as "subscribed".
-  const isPro = has?.({ plan: "org:bowser-automation" }) ?? false
+  const isPro = has?.({ plan: "org:bowser_automation" }) ?? false
 
   return { isLoaded, isPro, goToUpgrade }
 }
