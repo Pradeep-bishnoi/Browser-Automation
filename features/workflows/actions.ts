@@ -81,7 +81,7 @@ export async function runWorkflowAction({
   })
 
   const hasAgentNode = graph.nodes.some((node) => node.data.type === "agent")
-  if (hasAgentNode && !has({ plan: "pro" })) {
+  if (hasAgentNode && !has({ plan: "org:bowser-automation" })) {
     Sentry.logger.warn("Workflow run denied — Agent node requires Pro plan", {
       workflowId: id,
       orgId,

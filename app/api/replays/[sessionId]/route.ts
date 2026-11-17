@@ -23,7 +23,7 @@ export async function GET(
   // Session replay is a Pro feature. Gate it here, not just in the UI, so a
   // non-pro org can't pull a recording by calling the route directly. `has`
   // evaluates the active org, which we've confirmed exists above.
-  if (!has({ plan: "pro" })) {
+  if (!has({ plan: "org:bowser-automation" })) {
     return new Response("Pro plan required", { status: 403 })
   }
 
